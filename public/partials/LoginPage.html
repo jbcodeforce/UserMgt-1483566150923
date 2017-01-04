@@ -1,0 +1,114 @@
+<script type="text/ng-template" id="userForm.html">
+  <div class="modal-header">
+       <h3 class="modal-title">User Information</h3>
+  </div>
+  <div class="modal-body form-group">
+      <label>First Name</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.fname" placeholder="First Name"/><br />
+      <label>Last Name</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.lname" placeholder="Last Name"><br />
+      <label>Job Title</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.title" placeholder="Job Title"/><br />
+      <label>Work e-mail address</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.email" placeholder="email"/><br />
+	  <label>Phone</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.phone" placeholder="Phone"/><br />
+      <label>Company</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.company" placeholder="Company"/><br />
+      <label>City</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.city" placeholder="City"/><br />
+	  <label>Country or Region</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.country" placeholder="Country or Region"/><br />
+      <label>State or Province</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.state" placeholder="State or Province"/><br />
+      <label>Password</label>
+	  <font class="Warning-label" ng-show="elem.password != elem.cpassword" color="red">Please enter the same password</font>
+      <input class="form-control" id="sm" type="password" data-ng-model="elem.password" /><br />
+      <label>Password confirmation</label>
+      <input class="form-control" id="sm" type="password" data-ng-model="elem.cpassword" /><br />
+	  <label "checkbox-inline">Would you like an IBM representative to contact you regarding this IBM Software information?<br />
+		<input type="checkbox" data-ng-model="elem.beInformed" data-ng-init="elem.beInformed=false"/> <small>Yes</small><br />
+	  </label><br /><br />
+	  <label "checkbox-inline">Please keep me informed of products, services and offerings from IBM companies worldwide. Check the boxes below to receive more information about: <br />
+		<input type="checkbox" data-ng-model="elem.beInformedBPM" data-ng-init="elem.beInformedBPM=false"/><small>Business Process Management </small><br />
+		<input type="checkbox" data-ng-model="elem.beInformedOther" data-ng-init="elem.beInformedOther=false"/><small>I would also like to receive information about other IBM products</small><br />
+	  </label>
+</div>
+  <div class="modal-footer">
+       <button class="btn btn-success" ng-click="ok()" ng-disabled="elem.password != elem.cpassword || elem.fname == null || elem.lname == null || elem.email == null || elem.company == null|| elem.city == null ||  elem.country == null || elem.state == null ">Sign Up</button>
+       <button class="btn" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
+
+<script type="text/ng-template" id="changePassword.html">
+  <div class="modal-header">
+       <h3 class="modal-title">Change Password</h3>
+  </div>
+  <div class="modal-body form-group">
+      <label>First Name</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.fname" placeholder="First Name"/><br />
+      <label>Last Name</label>
+	  <input class="form-control" id="sm" type="text" data-ng-model="elem.lname" placeholder="Last Name"/><br />
+	  <label>Work e-mail address</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.email" /><br />
+      <label>Company</label>
+      <input class="form-control" id="sm" type="text" data-ng-model="elem.company" placeholder="Company"/><br />
+      <label>New Password</label>
+	  <font class="Warning-label" ng-show="elem.password != elem.cpassword" color="red">Please enter the same password</font>
+      <input class="form-control" id="sm" type="password" data-ng-model="elem.password" /><br />
+      <label>New Password confirmation</label>
+      <input class="form-control" id="sm" type="password" data-ng-model="elem.cpassword" /><br />
+</div>
+  <div class="modal-footer">
+       <button class="btn btn-success" ng-click="ok()" ng-disabled="elem.password != elem.cpassword || elem.password == null|| elem.fname == null || elem.lname == null || elem.email == null || elem.company == null">Submit</button>
+       <button class="btn" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
+
+
+
+<div class="row" data-ng-controller="LoginCtrl">
+
+        <div class="jumbotron" style="background-image: url(images/tree-sm.png)">
+			<h2>IBM Cognitive Business Operations</h2>
+			<h3>User Management</h3>
+		</div>
+		 <div class="col-md-6 col-md-offset-3">
+		 <p ng-bind-html="introduction"></p>
+
+    <h2>Login</h2>
+
+    <form name="form" data-ng-submit="u.login()" role="form">
+        <div class="form-group" data-ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+            <label for="username">Email address</label>
+            <input type="text" name="username" id="username" class="form-control" data-ng-model="u.email" required />
+            <span data-ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+        </div>
+
+        <div class="form-group" data-ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" data-ng-model="u.password" required />
+            <span data-ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+        </div>
+
+		<div class="form-message" data-ng-switch="pageStatus">
+			<div class="alert alert-danger" data-ng-switch-when="INCORRECT_PASSWORD">
+				<strong>Login Fail - </strong> Incorrect password
+			</div>
+			<div class="alert alert-danger" data-ng-switch-when="NO_USER_FOUND">
+				<strong>Login Fail - </strong> Unregistered ID
+			</div>
+			<div data-ng-switch-default class="alert alert-success">
+				Please login
+			</div>
+		</div>
+
+        <div class="form-actions">
+            <button type="submit" data-ng-disabled="form.$invalid || u.dataLoading" class="btn btn-primary" data-ng-click="logUser(u)">Login</button>
+            <a class="btn btn-link" data-ng-click="newUser()">Register</a>
+            <a class="btn btn-link" data-ng-click="changePassword() " data-ng-show="pageStatus == 'INCORRECT_PASSWORD'">Change Password</a>
+        </div>
+
+    </form>
+</div>
+</div>

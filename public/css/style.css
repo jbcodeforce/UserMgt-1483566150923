@@ -3,45 +3,54 @@
  */
 
 body,html {
-	background-color: #f5f7fa;
+	background-color: #3b4b54;
 	width: 100%;
 	height: 100%;
 	margin: 0 auto;
-	font-family: Lato,sans-serif;
-	color: #283D56;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+		"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	color: #ffffff;
 }
 
 /* header footer common */
 header, footer {
 	width: 100%;
 	text-align: center;
-}
-
-.container {
-	height: 100%;
-	overflow: auto;
-	display: flex;
-	flex-direction: column;
-}
-
-.banner {
-	background: #5586D6;
 	color: #fff;
-	padding: 10px;
 }
+
+
+
+@media (max-width: 600px){
+	.title, .tips, section{
+		width: 100%;
+	}
+}
+
+/* alignment */
+.title, .tips, section {
+	margin: 0 auto;
+}
+
+/* foreground color */
+.title, .tips {
+	xbackground-color: #2dcc70;
+}
+
+
 
 /* positions */
 header {
 	padding-top: 20px;
+	font-weight: bolder;
 	font-size: 1.3em;
 }
 footer {
-	padding: 10px;
-	font-size: .8rem;
+	position: relative;
 }
 .title, .tips {
 	height: 30px;
-	padding-top: 20px;
+	padding-top: 10px;
 	position: relative;
 }
 .title {
@@ -59,39 +68,35 @@ table {
 	width: 100%;
 }
 .content {
-	font-size: .8rem;
-	width: 30%;
-	vertical-align: top;
+	padding: 5px;
+	width: 60%;
+
 }
 .contentName {
-	padding: 10px;
-	padding-left: 20px;
-	width: 25%;
+	padding: 5px;
+	width: 30%;
 	font-weight:bold;
-	vertical-align: top;
-}
-.contentDetails {
-	padding: 10px;
 }
 .contentAction {
+	padding: 5px;
 	width: 10%;
-	padding-right: 20px;
-	text-align: right;
+	font-weight:bold;
 }
 
-.nameText {
-	font-weight: bold;
-}
 .records textarea {
 	height: 1.2em;
 	font-size: 1em;
 	resize: none;
 	width: 100%;
 	border: none;
-	overflow: hidden;
 	background-color: transparent;
+	color: #fff;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+		"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: .9em;
 }
+
+
 
 /* buttons */
 .detailBtn {
@@ -103,6 +108,9 @@ table {
 	cursor: pointer;
 }
 .addBtn {
+  position: absolute;
+  right: 20px;
+  top: 0px;
   background: none;
   border: none;
   cursor: pointer;
@@ -113,46 +121,76 @@ table {
 }
 .deleteBtn{
   background-image: url("../images/sprite.png");
-  background-position: -5px -568px;
-  width: 18px;
-  height: 18px;
+  background-position: -5px -588px;
+  width: 16px;
+  height: 16px;
     display:inline-block;
 }
 
 tr:hover .deleteBtn {
-
+	
 	cursor: pointer;
 }
 
 
 .tableRows{
-	border: 2px solid #DFE3E6
+	border-bottom: solid thin;
+	border-color:#26343f;
 }
 
+.leftHalf {
+	float: left;
+	background-color: #26343f;
+	width: 45%;
+	height: 100%;
+}
 
+.rightHalf {
+	float: right;
+	width: 55%;
+	background-color: #313f4a;
+	height: 100%;
+	overflow: auto;
+}
 
 .fieldname {
 	text-align: right;
 	border-right: 1px solid #fff;
 }
 
+
+#appinfo {
+	border-top: 1px solid #fff;
+}
+#appinfo td {
+	padding: 5px;
+	height: 50;
+	font-size: small;
+	
+}
+
+
+
 .errorMsg {
 	color: red;
 	font-weight:normal;
 }
 .newappIcon {
+  padding-top: 10%;
   display: block;
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 200px;
+  max-height: 200px;
   margin: 0 auto;
-	padding: 10px;
+  padding-bottom: 2em;
 }
 
-.appTitle {
-	padding: 15px;
+h1 {
+  font-weight: bold;
+  font-size: 2em;
+  padding-left: 10%;
+  padding-right: 10%;
   margin: 0 auto;
   text-align: center;
-	font-size: 1.5rem;
 }
 
 .description {
@@ -161,21 +199,7 @@ tr:hover .deleteBtn {
   text-align: center;
 }
 
-.infoImg {
-	cursor: pointer;
-}
-.flexBox {
-	display: flex;
-	flex-wrap: wrap;
-}
-.contentTiles {
-		padding: 10px;
-		font-size: .8rem;
-}
-.uploadBox {
-  margin: 0 auto;
-  text-align: center;
-}
-.appinfo {
-	padding: 10px;
+a {
+  text-decoration: none;
+  color: #00aed1;
 }

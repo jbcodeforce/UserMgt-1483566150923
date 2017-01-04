@@ -1,8 +1,11 @@
-# Node.js Cloudant Starter Overview
+This application offers the management operations to register a user and perform CRUD on company and user.
 
-The Node.js Cloudant Starter demonstrates how to use the Bluemix Cloudant NoSQL DB service. The app displays persisted files and lets the user upload new files or delete old files.
+The isolation of this feature as a micro service will help to reuse it cross apps.
 
-## Decomposition Instructions
+It is a backend api and services.
+- registerUser(userData)
+- getUser(userid)
+- getCompany(cname)
 
-* See app.js for how to obtain and use the Cloudant credentials as well as the file CRUD API
-* See public/scripts/index.js and public/scripts/util.js for how the front-end calls the back-end API
+
+It used basic auth on unique user.
