@@ -22,17 +22,39 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var basicAuth = require('basic-auth');
 
 //create a new express server
 var app = express();
 
 
-var User = require('./server/userDAOMockup');
+var User = require('./server/userDAO');
 
 app.use(require('cookie-parser')());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+
+// Authenticator
+var auth = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === '456dfg62de' && user.pass === '1passmelesel0') {
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+};
 
 //files are looked regarding to the static directory public
 app.use(express.static(path.join(__dirname, '/public')));
@@ -40,28 +62,62 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/public/home.html'));
 });
 
-app.post('/api/register', function(req,res,next){
-	res.send(User.addUser(req.body,next))
+app.post('/api/register', auth,function(req,res,next){
+  User.addUser(req.body,function(user,msg){
+    if (msg === "User created") {
+        res.status(200).json(user);
+    } else {
+      res.status(200).json(msg);
+    }
+  });
 });
-app.put('/api/password', function(req,res,next){
+
+app.put('/api/password', auth, function(req,res,next){
 	res.send(User.updatePassword(req.body,next))
 });
 
-app.get('/api/user',function(req,res,next){
-	res.send(User.getUser(req.body,next))
+app.get('/api/user/:id',auth,function(req,res,next){
+  User.getUser(req.params.id,function(data,msg){
+    user="User not found";
+    if (msg === "User found") {
+        user= data;
+    }
+    res.status(200).json(user);
+  });
 });
 
-app.put('/api/user',function(req,res,next){
-	res.send(User.updateUser(req.body,next))
+app.get('/api/user/name/:name',auth,function(req,res,next){
+  User.findByUsername(req.params.name,function(data,msg){
+    user="User not found";
+    if (msg === "User found") {
+        user=data;
+    }
+    res.status(200).json(user);
+  });
 });
 
-/**
- * TODO
-
-app('api/user',function(req,res,next){
-	res.send(User.deleteUser(req.body,next))
+app.get('/api/users',auth,function(req,res,next){
+  User.getUsers(function(users,msg){
+    res.status(200).json(users);
+  })
 });
-*/
-app.listen("6008",  function () {
-	console.log('User Management v0.0.1 11/10/16 started ready at localhost:6008');
+
+app.put('/api/user',auth,function(req,res,next){
+  User.updateUser(req.body,function(data,msg){
+    user="User not found";
+    if (msg === "Updated") {
+        user=data;
+    }
+    res.status(200).json(user);
+  })
+});
+
+app.get('/hello', function(req, res) {
+  res.send('Hello, a toi !');
+  }
+);
+
+var port=process.env.PORT || 6008
+app.listen(port,  function () {
+	console.log('User Management v0.0.1 11/10/16 started ready at localhost:'+port);
 });

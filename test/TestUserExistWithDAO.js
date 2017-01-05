@@ -9,16 +9,62 @@ var userDAO = require('../server/userDAO');
 var assert =require('chai').assert;
 
 
-describe('Verify user exist', function(){
+describe('Verify user exists using findByUsername', function(){
+		it('should be present',
+		  function(done){
+				userDAO.findByUsername('boyerje@us.ibm.com',function(data,msg){
+					console.log(data+" "+msg);
+					assert.equal("User found",msg);
+					done();
+				});
+			}
+	   );
+});
+
+describe('Verify findByUsername', function(){
 		it('should not be present',
 		  function(done){
-				var b=userDAO.getUser('boyerje@us.email.com',function(err,data){
-					console.log(data);
-					return data;
+				userDAO.findByUsername('boyerje2@us.ibm.com',function(data,msg){
+					console.log(data+" "+msg);
+					assert.equal("User not found",msg);
+					done();
 				});
-				console.log(b);
-				assert.isUndefined(b);
-				done();
+			}
+	   );
+});
+
+describe('Verify get user ', function(){
+		it('should be present',
+		  function(done){
+				userDAO.getUser('6fc3671d0259a010aea9ada173217b4e',function(data,msg){
+					console.log(JSON.stringify(data)+" "+msg);
+					assert.equal("User found",msg);
+					done();
+				});
+			}
+	   );
+});
+
+describe('Verify get user wrong id', function(){
+		it('should not be present',
+		  function(done){
+				userDAO.getUser('6f7b4e',function(data,msg){
+					console.log(JSON.stringify(data)+" "+msg);
+					assert.equal("User not found",msg);
+					done();
+				});
+			}
+	   );
+});
+
+describe('Verify user exist wrong email', function(){
+		it('should not be present',
+		  function(done){
+				userDAO.userExists('boyerje2@us.ibm.com',function(data,msg){
+					console.log(JSON.stringify(data)+" "+msg);
+					assert.equal("User not found",msg);
+					done();
+				});
 			}
 	   );
 });

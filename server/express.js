@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This express script defines the REST services and the authentication mechanism.
  * We use passport for authentication management with local strategy: so users
  * are define in cloudant db and their credentials are validated with login page
@@ -20,9 +20,6 @@
 'use strict';
 
 var User = require('./users');
-
-
-
 
 //Create a new Express application.
 var express = require('express');
@@ -36,7 +33,7 @@ var bodyParser = require('body-parser');
 module.exports = function (app) {
 	// router.use(bodyParser.urlencoded({ extended: true }));
 	// router.use(bodyParser.json());
-	
+
 	function ensureAuthenticated(req, res, next) {
 		console.log('Enter EnsureAuthenticated');
 		if(!req.isAuthenticated()) {
@@ -48,33 +45,33 @@ module.exports = function (app) {
 			return next();
 		}
 	}
-	
+
 	//files are looked regarding to the static directory public
 	app.use(express.static(path.join(__dirname, '/../public')));
-	
+
 	app.use(require('cookie-parser')());
 	app.use(bodyParser.urlencoded({extended:true}));
 	app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
 	app.use(passport.initialize());
 	// persist login information in http session
 	app.use(passport.session());
-	
+
 	// Define routes
 	// --------------------------------------------------
 	// angular single page
 	app.get('/',  ensureAuthenticated,function(req, res) {
 		console.log(res);
 	     res.sendFile(__dirname+ '../public/index.html');
-	}); 
-	
+	});
+
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
-	
+
 	app.get('/api/user', ensureAuthenticated,function(req, res) {
 		console.log(req.user['email']);
 		res.send({user: {email : req.user['email'], fname : req.user['fname'], lname : req.user['lname']}});
 	});
-	
+
 	app.post('/login', function(req, res, next) {
 		console.log(req.body);
 		passport.authenticate('local', function(user, err, info) {
@@ -96,19 +93,19 @@ module.exports = function (app) {
 			req.login(user, function(err) {
 				if (err) res.send({ success : false, message : 'authentication Failed' + err });
 				return res.send({ success : true, message : 'authentication succeeded', user : {email : user.email, fname : user.fname, lname : user.lname}});
-			});      
+			});
 		})(req, res, next);
 	});
-	
+
     app.post('/api/register', function(req,res){
     	res.send(User.register(req.body))
     });
-		
+
 	app.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
 	});
-	
+
 	app.post('/update/password', function(req,res) {
 		User.updatePassword(req.body, function(err){
 			if (err) {
@@ -119,15 +116,15 @@ module.exports = function (app) {
 			}
 		})
 	});
-	
-  
+
+
     app.get('/hello', ensureAuthenticated, function(req, res) {
-	    res.send('Hello, '+ req.user['id'] + '!'); 
+	    res.send('Hello, '+ req.user['id'] + '!');
 	    }
     );
 
 	app.get('/failure', function(req, res) {
-	    res.send('Login failed'); 
+	    res.send('Login failed');
 	    }
-	) 
+	)
 }
