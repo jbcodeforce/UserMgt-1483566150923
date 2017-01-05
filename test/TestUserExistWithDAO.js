@@ -36,7 +36,7 @@ describe('Verify findByUsername', function(){
 describe('Verify get user ', function(){
 		it('should be present',
 		  function(done){
-				userDAO.getUser('6fc3671d0259a010aea9ada173217b4e',function(data,msg){
+				userDAO.getUser('c5c9354876c130f87362daf32c57fd7c',function(data,msg){
 					console.log(JSON.stringify(data)+" "+msg);
 					assert.equal("User found",msg);
 					done();

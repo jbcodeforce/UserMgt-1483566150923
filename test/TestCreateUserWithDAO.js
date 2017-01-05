@@ -9,7 +9,7 @@ var userDAO = require('../server/userDAO');
 var assert =require('chai').assert;
 
 
-describe('Create new user', function(){
+describe('Create new user on existing email', function(){
 	describe('#add user',function(){
 		it('should not add user as it exists',
 		  function(done){
@@ -26,34 +26,17 @@ describe('Create new user', function(){
 });
 
 
-describe('Create new user', function(){
-	it('add user',function(done){
+describe('Create new user bill then delete it', function(){
+	it('add user and delete',function(done){
 		var user = {name:'bill',email:'bill@ibm.com',company:'IBM'}
-		userDAO.addUser(user,function(user,msg){
-			console.log(user);
-			assert.equal("User created",msg);
+		userDAO.addUser(user,function(data,msg){
+				assert.equal("User created",msg);
+				user=data;
+				console.log(user);
+				userDAO.deleteUser(user,function(data,msg){
+					assert.equal("Deleted",msg);
+					done();
+				});
 		  })
-		userDAO.getUsers(function(data,msg){
-			console.log(data);
-			done();
-		});
-	});
-});
-
-describe('Delete the new user ', function(){
-	var user;
-	beforeEach(function(done){
-		userDAO.findByUsername('bill@ibm.com',function(data,msg){
-			user=data;
-			done();
-		  })
-	});
-	it('delete user',function(done){
-		if (user) {
-			userDAO.deleteUser(user,function(data,msg){
-				assert.equal("Deleted",msg);
-				done();
-			})
-		}
 	});
 });

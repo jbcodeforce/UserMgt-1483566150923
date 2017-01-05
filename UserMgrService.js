@@ -67,7 +67,7 @@ app.post('/api/register', auth,function(req,res,next){
     if (msg === "User created") {
         res.status(200).json(user);
     } else {
-      res.status(200).json(msg);
+      res.status(401).json(msg);
     }
   });
 });
@@ -76,23 +76,36 @@ app.put('/api/password', auth, function(req,res,next){
 	res.send(User.updatePassword(req.body,next))
 });
 
+app.post('/api/authenticate', auth,function(req,res,next){
+  User.authenticateUser(req.body.email, req.body.password, function(user,msg){
+    if (msg === "Authenticated") {
+        res.status(200).json(user);
+    } else if (msg === "Incorrect password") {
+        res.status(401).json(msg);
+    } else {
+        res.status(401).json(msg);
+    }
+  });
+});
+
+
 app.get('/api/user/:id',auth,function(req,res,next){
   User.getUser(req.params.id,function(data,msg){
-    user="User not found";
     if (msg === "User found") {
         user= data;
+        res.status(200).json(user);
     }
-    res.status(200).json(user);
+    res.status(401).json(msg);
   });
 });
 
 app.get('/api/user/name/:name',auth,function(req,res,next){
   User.findByUsername(req.params.name,function(data,msg){
-    user="User not found";
     if (msg === "User found") {
         user=data;
+        res.status(200).json(user);
     }
-    res.status(200).json(user);
+    res.status(401).json(msg);
   });
 });
 

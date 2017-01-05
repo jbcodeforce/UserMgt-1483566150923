@@ -80,6 +80,7 @@ var updateUserRev= function(user,data){
 module.exports=  {
 		// as the call will be asynchronous, next points to the callback function
 		findByUsername: function(email,next){
+			 email=email.toLowerCase();
 			var cloudantquery = {
 				"selector": {
 					"email": {"$eq": email}
@@ -143,6 +144,7 @@ module.exports=  {
 		},
 
 		authenticateUser : function(email,pwd,next) {
+			 email=email.toLowerCase();
 		  _getUser(email,function(user,msg) {
 				if (msg === "User found") {
 					if (isValidPassword(user, pwd)){
@@ -168,6 +170,7 @@ module.exports=  {
 	 },
 
 	 addUser : function(user,next){
+		 user.email=user.email.toLowerCase();
 		 console.log("Add user "+user.email);
 		 _getUser(user.email,function(_user,msg){
 			 if (msg === "User found") {
