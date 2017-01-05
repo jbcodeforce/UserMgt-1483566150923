@@ -190,7 +190,6 @@ module.exports=  {
 
 	 updatePassword : function(user,next){
 		 user.password = createHash(user.password);
-		 user.cpassword = createHash(user.cpassword);
 		 updateUser(user,function(data,msg){
 			  next(updateUserRev(user,data),msg);
 		 });
