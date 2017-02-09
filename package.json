@@ -23,7 +23,7 @@
   },
   "repository": {},
   "engines": {
-    "node": "4.x"
+    "node": "6.x"
   },
   "devDependencies": {
     "mocha": "^3.2.0",
