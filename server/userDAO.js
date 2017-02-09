@@ -233,15 +233,15 @@ module.exports=  {
 				 user.validated = false;
 				 var emailValidationString = randomString(32);
 				 user.emailValidationHash = createHash(emailValidationString);
-				 console.log('http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString);
+				 console.log('http://iwapp.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString);
 				 console.log('Validation works: ' + bCrypt.compareSync(emailValidationString, user.emailValidationHash));
 
 				 var mailOptions = {
 				    from: '"IW APP" <iwappibm@gmail.com>', // sender address
 				    to: user.email,
 				    subject: 'IW-APP Email Verification', // Subject line
-				    text: 'Welcome to the Innovation Workshop Application, please validate by clicking this link: http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
-				    html: '<h3>Email Validation</h3><p>Welcome to the Innovation Workshop Application, please  validate by clicking this link: <a href=\"http://usermgt.mybluemix.net/profile/validate/'+ user.email + '/' + emailValidationString +'\">Validate your user</a>' + '</p>' // html body
+				    text: 'Welcome to the Innovation Workshop Application, please validate by clicking this link: https://iwapp.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
+				    html: '<h3>Email Validation</h3><p>Welcome to the Innovation Workshop Application, please  validate by clicking this link: <a href=\"https://iwapp.mybluemix.net/profile/validate/'+ user.email + '/' + emailValidationString +'\">Validate your user</a>' + '</p>' // html body
 				};
 
 				// send mail with defined transport object
