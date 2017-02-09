@@ -85,7 +85,7 @@ var validateUserEmail = function(code, email, next) {
 			if(!user.emailValidationHash){
 				next({validated: false, error: "no code to compare"});
 			} else {
-				if(bCrypt.compareSync(code, user.emailValidationHash)) { 
+				if(bCrypt.compareSync(code, user.emailValidationHash)) {
 					user.validated = true;
 					updateUser(user, function(updatedUser, msg) {
 						if(msg === "Updated"){
@@ -94,7 +94,7 @@ var validateUserEmail = function(code, email, next) {
 							next({validated: false, error: "error updating user validation status"});
 						}
 					});
-				} else { 
+				} else {
 					next({validated: false, error: "incorrect code"});
 				}
 			}
@@ -233,15 +233,15 @@ module.exports=  {
 				 user.validated = false;
 				 var emailValidationString = randomString(32);
 				 user.emailValidationHash = createHash(emailValidationString);
-				 console.log('http://localhost:3000/profile/validate/' + user.email + '/' + emailValidationString);
+				 console.log('http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString);
 				 console.log('Validation works: ' + bCrypt.compareSync(emailValidationString, user.emailValidationHash));
 
 				 var mailOptions = {
 				    from: '"IW APP" <iwappibm@gmail.com>', // sender address
 				    to: user.email,
 				    subject: 'IW-APP Email Verification', // Subject line
-				    text: 'please validate by clicking this link: http://localhost:3000/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
-				    html: '<h3>Email Validation</h3><p>please validate by clicking this link: http://localhost:3000/profile/validate/' + user.email + '/' + emailValidationString + '</p>' // html body
+				    text: 'Welcome to the Innovation Workshop Aplication, please validate by clicking this link: http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
+				    html: '<h3>Email Validation</h3><p>please validate by clicking this link: http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString + '</p>' // html body
 				};
 
 				// send mail with defined transport object
