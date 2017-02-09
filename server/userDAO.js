@@ -240,8 +240,8 @@ module.exports=  {
 				    from: '"IW APP" <iwappibm@gmail.com>', // sender address
 				    to: user.email,
 				    subject: 'IW-APP Email Verification', // Subject line
-				    text: 'Welcome to the Innovation Workshop Aplication, please validate by clicking this link: http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
-				    html: '<h3>Email Validation</h3><p>please validate by clicking this link: http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString + '</p>' // html body
+				    text: 'Welcome to the Innovation Workshop Application, please validate by clicking this link: http://usermgt.mybluemix.net/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
+				    html: '<h3>Email Validation</h3><p>Welcome to the Innovation Workshop Application, please  validate by clicking this link: <a href=\"http://usermgt.mybluemix.net/profile/validate/'+ user.email + '/' + emailValidationString +'\">Validate your user</a>' + '</p>' // html body
 				};
 
 				// send mail with defined transport object
