@@ -25,6 +25,18 @@
 var cloudant = require('./dbcontrol')
 var dbname='db_users';
 var db = cloudant.use(dbname);
+
+var nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'iwappibm@gmail.com',
+        pass: 'IBMAppiw'
+    }
+});
+
+
 // needed to encrypt password
 var bCrypt = require('bcrypt-nodejs');
 // use http
@@ -37,7 +49,6 @@ var _getUser=function(email,next){
 				"email": email.trim()
 			}}
 	db.find(cloudantquery, function(err, data) {
-		  console.log(data);
 			if (err) {
 				console.log(err);
 				next({"email":email},"User not found");
@@ -63,6 +74,34 @@ var updateUser = function(user,next){
 	});
 }
 
+var validateUserEmail = function(code, email, next) {
+	_getUser(email, function(user, msg) {
+		if(msg == "User not found"){
+			next({validated: false, error: msg});
+		}
+		if(user.validated){
+			next({validated: true});
+		} else {
+			if(!user.emailValidationHash){
+				next({validated: false, error: "no code to compare"});
+			} else {
+				if(bCrypt.compareSync(code, user.emailValidationHash)) { 
+					user.validated = true;
+					updateUser(user, function(updatedUser, msg) {
+						if(msg === "Updated"){
+							next({validated: true});
+						} else {
+							next({validated: false, error: "error updating user validation status"});
+						}
+					});
+				} else { 
+					next({validated: false, error: "incorrect code"});
+				}
+			}
+		}
+	});
+}
+
 var isValidPassword= function(user, password){
 	return bCrypt.compareSync(password, user.password);
 }
@@ -75,6 +114,13 @@ var updateUserRev= function(user,data){
 	user["_id"]=data.id;
 	user["_rev"]=data.rev;
 	return user;
+}
+
+var randomString = function (length) {
+	var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+    return result;
 }
 
 module.exports=  {
@@ -168,6 +214,11 @@ module.exports=  {
 			  next(updateUserRev(user,data),msg);
 		 });
 	 },
+	 validateEmail : function(code, email, next){
+		 validateUserEmail(code, email, function(validated){
+			  next(validated);
+		 });
+	 },
 
 	 addUser : function(user,next){
 		 user.email=user.email.toLowerCase();
@@ -178,6 +229,29 @@ module.exports=  {
 			 } else {
 				 user.creationDate=new Date().toISOString();
 				 user.password = createHash(user.password);
+
+				 user.validated = false;
+				 var emailValidationString = randomString(32);
+				 user.emailValidationHash = createHash(emailValidationString);
+				 console.log('http://localhost:3000/profile/validate/' + user.email + '/' + emailValidationString);
+				 console.log('Validation works: ' + bCrypt.compareSync(emailValidationString, user.emailValidationHash));
+
+				 var mailOptions = {
+				    from: '"IW APP" <iwappibm@gmail.com>', // sender address
+				    to: user.email,
+				    subject: 'IW-APP Email Verification', // Subject line
+				    text: 'please validate by clicking this link: http://localhost:3000/profile/validate/' + user.email + '/' + emailValidationString, // plain text body
+				    html: '<h3>Email Validation</h3><p>please validate by clicking this link: http://localhost:3000/profile/validate/' + user.email + '/' + emailValidationString + '</p>' // html body
+				};
+
+				// send mail with defined transport object
+				transporter.sendMail(mailOptions, (error, info) => {
+				    if (error) {
+				        return console.log(error);
+				    }
+				    console.log('Message %s sent: %s', info.messageId, info.response);
+				});
+
 				 db.insert(user, function(err, data) {
 					 if (err) {
 						    console.log(err);

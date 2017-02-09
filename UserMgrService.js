@@ -72,6 +72,12 @@ app.post('/api/register', auth,function(req,res,next){
   });
 });
 
+app.post('/api/validate', auth,function(req,res,next){
+  User.validateEmail(req.body.code, req.body.email, function(validated){
+    res.status(200).json(validated);
+  });
+});
+
 app.put('/api/password', auth, function(req,res,next){
 	res.send(User.updatePassword(req.body,next))
 });
