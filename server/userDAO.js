@@ -28,7 +28,7 @@ var db = cloudant.use(dbname);
 
 var nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
+var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'iwappibm@gmail.com',
